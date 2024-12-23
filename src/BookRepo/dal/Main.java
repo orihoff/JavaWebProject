@@ -1,4 +1,4 @@
-package workout;
+package BookRepo.dal;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
