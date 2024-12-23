@@ -50,7 +50,7 @@ public class BookCLI {
                         String genre = scanner.nextLine();
                         System.out.print("Enter publication year: ");
                         int year = scanner.nextInt();
-                        bookService.addBook(new Book(id, title, author, genre, year));
+                        bookService.addBook(title, author, genre, year));
                         break;
                     case 3:
                         // Update logic
