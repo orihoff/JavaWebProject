@@ -23,12 +23,12 @@ public class BookCLI {
 
         while (!exit) {
             System.out.println("\n=== Book Repository ===");
-            System.out.println("1. Show all books");
-            System.out.println("2. Add a book");
-            System.out.println("3. Update a book");
-            System.out.println("4. Delete a book");
-            System.out.println("5. Find a book by ID");
-            System.out.println("0. Exit");
+            System.out.println("	1. Show all books");
+            System.out.println("	2. Add a book");
+            System.out.println("	3. Update a book");
+            System.out.println("	4. Delete a book");
+            System.out.println("	5. Find a book by ID");
+            System.out.println("	0. Exit");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
