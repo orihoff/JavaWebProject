@@ -1,6 +1,5 @@
 package BookRepo.ui;
 
-import BookRepo.entity.Book;
 import BookRepo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,8 +39,6 @@ public class BookCLI {
                         bookService.getAllBooks().forEach(System.out::println);
                         break;
                     case 2:
-                        System.out.print("Enter ID: ");
-                        String id = scanner.nextLine();
                         System.out.print("Enter title: ");
                         String title = scanner.nextLine();
                         System.out.print("Enter author: ");
@@ -50,18 +47,18 @@ public class BookCLI {
                         String genre = scanner.nextLine();
                         System.out.print("Enter publication year: ");
                         int year = scanner.nextInt();
-                        bookService.addBook(title, author, genre, year));
+                        bookService.addBook(title, author, genre, year);
                         break;
                     case 3:
                         // Update logic
                         break;
                     case 4:
                         System.out.print("Enter ID to delete: ");
-                        bookService.deleteBook(scanner.nextLine());
+                        bookService.deleteBook(scanner.nextInt());
                         break;
                     case 5:
                         System.out.print("Enter ID: ");
-                        System.out.println(bookService.getBookById(scanner.nextLine()));
+                        System.out.println(bookService.getBookById(scanner.nextInt()));
                         break;
                     case 0:
                         exit = true;
