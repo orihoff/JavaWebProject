@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class BookFileDao implements BookDao, Serializable {
+public class BookFileDao implements BookDao {
 
     private final String filePath = "./books.dat";
     private List<Book> books;
@@ -20,6 +20,7 @@ public class BookFileDao implements BookDao, Serializable {
     
     @SuppressWarnings("unchecked")
     private void loadBooks() {
+    	// try-with-resources: try what is written in () without the need to manually close it using a finally block
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
             books = (List<Book>) ois.readObject();
         } catch (FileNotFoundException e) {
@@ -29,10 +30,19 @@ public class BookFileDao implements BookDao, Serializable {
         }
     }
     
+    private void saveBooksToFile() throws Exception {
+    	// try-with-resources: try what is written in () without the need to manually close it using a finally block
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(books);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving book to file.", e);
+        }
+    }
+    
     @Override
     public List<Book> getAll() throws Exception {
         Collections.sort(books);
-        return new ArrayList<>(books);
+        return new ArrayList<>(books); // ArrayList class implements 'Serializable' interface by default
     }
 
     @Override
@@ -74,13 +84,5 @@ public class BookFileDao implements BookDao, Serializable {
             }
         }
         return null;
-    }
-
-    private void saveBooksToFile() throws Exception {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(books);
-        } catch (Exception e) {
-            throw new RuntimeException("Error saving book to file.", e);
-        }
     }
 }
