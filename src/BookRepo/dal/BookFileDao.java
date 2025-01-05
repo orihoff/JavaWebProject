@@ -32,7 +32,7 @@ public class BookFileDao implements BookDao {
             currentID = 0;
         	books = new ArrayList<>();
         } catch (Exception e) {
-            throw new RuntimeException("Error loading books from file.", e);
+            throw new RuntimeException("Error: Could not load books from file.", e);
         }
     }
     
@@ -42,7 +42,7 @@ public class BookFileDao implements BookDao {
         	oos.writeInt(currentID);
         	oos.writeObject(books);
         } catch (Exception e) {
-            throw new RuntimeException("Error saving book to file.", e);
+            throw new RuntimeException("Error: Could not save book to file.", e);
         }
     }
     
