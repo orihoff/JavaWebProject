@@ -12,6 +12,7 @@ import java.util.List;
 public class BookFileDao implements BookDao {
 
     private final String filePath = "./books.dat";
+    private int currentID;
     private List<Book> books;
 
     public BookFileDao() {
@@ -22,9 +23,11 @@ public class BookFileDao implements BookDao {
     private void loadBooks() {
     	// try-with-resources: try what is written in () without the need to manually close it using a finally block
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            books = (List<Book>) ois.readObject();
+            currentID = ois.readInt();
+        	books = (List<Book>) ois.readObject();
         } catch (FileNotFoundException e) {
-            books = new ArrayList<>();
+            currentID = 0;
+        	books = new ArrayList<>();
         } catch (Exception e) {
             throw new RuntimeException("Error loading books from file.", e);
         }
@@ -33,7 +36,8 @@ public class BookFileDao implements BookDao {
     private void saveBooksToFile() throws Exception {
     	// try-with-resources: try what is written in () without the need to manually close it using a finally block
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(books);
+        	oos.writeInt(currentID);
+        	oos.writeObject(books);
         } catch (Exception e) {
             throw new RuntimeException("Error saving book to file.", e);
         }
@@ -50,13 +54,14 @@ public class BookFileDao implements BookDao {
         if (books.contains(book)) {
             throw new Exception("Book with ID #" + book.getId() + " already exists in system.");
         }
+        currentID++;
+        book.setId(String.valueOf(currentID));
         books.add(book);
         saveBooksToFile();
     }
 
     @Override
     public void update(Book book) throws Exception {
-    	//maybe check that book is not null .. ?
         Book existingBook = get(book.getId());
         if (existingBook == null) {
             throw new Exception("Book with ID #" + book.getId() + " not found in system.");

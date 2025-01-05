@@ -80,11 +80,11 @@ public class Book implements Serializable, Comparable<Book> {
 
     @Override
     public String toString() {
-        return "Book: \n" +
-                "id='" + id + '\n' +
-                ", title='" + title + '\n'+
-                ", author='" + author + '\n' +
-                ", genre='" + genre + '\n' +
-                ", publicationYear=" + publicationYear;
+        return "\nBook: \n" +
+                "\tID: " + id + "\n" +
+                "\tTitle: " + title + "\n"+
+                "\tAuthor: " + author + "\n" +
+                "\tGenre: " + genre + "\n" +
+                "\tPublication Year: " + publicationYear;
     }
 }
