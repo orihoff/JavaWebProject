@@ -20,6 +20,9 @@ public class BookService {
 	@Value("${maxWordsInBook}")
 	private int maxCharactersinBookName;
 	
+	@Value("${whenWasTheFirstBookwriten}")
+	private int MinYear;
+	
 	
     private final BookDao bookDao;
 
@@ -39,6 +42,9 @@ public class BookService {
 		if (title == null || title.isEmpty() || author == null || author.isEmpty() || genre == null
 				|| genre.isEmpty()) {
 			throw new Exception("Title, author, and genre are required fields.");
+		}
+		if (year < MinYear) {
+            throw new Exception("Year cannot be less than " + MinYear + ".");
 		}
 		if (title.length() > maxCharactersinBookName) {
 	        throw new Exception("Title cannot exceed " + maxCharactersinBookName + " characters.");
