@@ -67,10 +67,10 @@ public class BookFileDao implements BookDao {
     public void update(Book book) throws Exception {
         Book existingBook = get(book.getId());
         if (existingBook == null) {
-            throw new Exception("Book with ID #" + book.getId() + " not found in system.");
+            throw new BookNotFoundException(book.getId());
         }
         books.remove(existingBook);
-        books.add(book);
+        books.add(book);	
         saveBooksToFile();
     }
 
@@ -78,7 +78,7 @@ public class BookFileDao implements BookDao {
     public void delete(String id) throws Exception {
         Book book = get(id);
         if (book == null) {
-            throw new Exception("Book with ID #" + id + " not found in system.");
+            throw new BookNotFoundException(id);
         }
         books.remove(book);
         saveBooksToFile();

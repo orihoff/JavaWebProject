@@ -14,6 +14,7 @@ public class Book implements Serializable, Comparable<Book> {
     static int currentId = 1;
 
     public Book(String title, String author, String genre, int publicationYear ) {
+    	
         this.id = String.valueOf(Book.currentId);
         Book.currentId++;
         this.title = title;

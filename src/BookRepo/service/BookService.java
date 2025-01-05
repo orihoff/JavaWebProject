@@ -2,6 +2,7 @@ package BookRepo.service;
 
 import BookRepo.dal.BookDao;
 import BookRepo.entity.Book;
+import BookRepo.exceptions.BookNotFoundException;
 import BookRepo.exceptions.ExceedTitleLengthException;
 import BookRepo.exceptions.InvalidBookYearException;
 import BookRepo.exceptions.MissingRequiredBookFieldsException;
@@ -56,8 +57,34 @@ public class BookService {
 		bookDao.save(book);
 	}
 
-    public void updateBook(Book book) throws Exception {
-        bookDao.update(book);
+    public void updateBook(String id,String title, String author, String genre, int year) throws Exception {
+    	// Fetch the existing book by ID
+        Book existingBook = bookDao.get(id);
+        
+        // If the book does not exist, throw an exception
+        if (existingBook == null) {
+            throw new BookNotFoundException(id);
+        }
+        
+        if (title == null || title.isEmpty() || author == null || author.isEmpty() || genre == null
+				|| genre.isEmpty()) {
+			throw new MissingRequiredBookFieldsException();
+		}
+		if (year < MinYear) {
+            throw new InvalidBookYearException(MinYear);
+		}
+		if (title.length() > maxCharactersinBookName) {
+	        throw new ExceedTitleLengthException(maxCharactersinBookName);
+	    }
+     // If the book exists, create a new Book object with the updated details
+        existingBook.setTitle(title);
+        existingBook.setAuthor(author);
+        existingBook.setGenre(genre);
+        existingBook.setPublicationYear(year);
+        
+        // Call the update method of the DAO to update the book in the repository
+        bookDao.update(existingBook);
+
     }
 
     public void deleteBook(String id) throws Exception { // Change int to String
