@@ -3,14 +3,19 @@ package BookRepo.entity;
 import java.io.Serializable;
 
 public class Book implements Serializable, Comparable<Book> {
-    private String id;
+
+	
+	private int id;
     private String title;
     private String author;
     private String genre;
     private int publicationYear;
+    private String content;
+    static int currentId = 1;
 
-    public Book(String id, String title, String author, String genre, int publicationYear) {
-        this.id = id;
+    public Book(String title, String author, String genre, int publicationYear ) {
+        this.id = Book.currentId;
+        Book.currentId++;
         this.title = title;
         this.author = author;
         this.genre = genre;
@@ -18,11 +23,12 @@ public class Book implements Serializable, Comparable<Book> {
     }
 
     // Getters and Setters
-    public String getId() {
+    
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -63,22 +69,21 @@ public class Book implements Serializable, Comparable<Book> {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Book book = (Book) obj;
-        return id.equals(book.id);
+        return id == book.id;
     }
 
     @Override
     public int compareTo(Book other) {
-        return this.id.compareTo(other.id);
+        return this.id - other.id;
     }
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", genre='" + genre + '\'' +
-                ", publicationYear=" + publicationYear +
-                '}';
+        return "Book: \n" +
+                "id='" + id + '\n' +
+                ", title='" + title + '\n'+
+                ", author='" + author + '\n' +
+                ", genre='" + genre + '\n' +
+                ", publicationYear=" + publicationYear;
     }
 }

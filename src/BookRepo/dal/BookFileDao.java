@@ -1,3 +1,4 @@
+
 package BookRepo.dal;
 
 import BookRepo.entity.Book;
@@ -45,7 +46,7 @@ public class BookFileDao implements BookDao {
     }
 
     @Override
-    public void delete(String id) throws Exception {
+    public void delete(int id) throws Exception {
         Book book = get(id);
         if (book == null) {
             throw new Exception("Book with ID " + id + " not found.");
@@ -55,9 +56,9 @@ public class BookFileDao implements BookDao {
     }
 
     @Override
-    public Book get(String id) throws Exception {
+    public Book get(int id) throws Exception {
         for (Book book : books) {
-            if (book.getId().equals(id)) {
+            if (book.getId() == id) {
                 return book;
             }
         }
@@ -70,7 +71,9 @@ public class BookFileDao implements BookDao {
             books = (List<Book>) ois.readObject();
         } catch (FileNotFoundException e) {
             books = new ArrayList<>();
-        } catch (Exception e) {
+            // Optionally log the event
+            System.err.println("File not found, initializing empty book list.");
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException("Error loading books from file.", e);
         }
     }

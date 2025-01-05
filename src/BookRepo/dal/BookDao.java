@@ -7,6 +7,6 @@ public interface BookDao {
     List<Book> getAll() throws Exception;
     void save(Book book) throws Exception;
     void update(Book book) throws Exception;
-    void delete(String id) throws Exception;
-    Book get(String id) throws Exception;
+    void delete(int id) throws Exception;
+    Book get(int id) throws Exception;
 }

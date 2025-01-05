@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class BookService {
-
+	
     private final BookDao bookDao;
 
     @Autowired
@@ -21,22 +21,23 @@ public class BookService {
         return bookDao.getAll();
     }
 
-    public void addBook(Book book) throws Exception {
-        if (bookDao.getAll().size() >= 100) {
-            throw new Exception("Cannot save more than 100 books.");
-        }
-        bookDao.save(book);
-    }
+	public void addBook(String title, String author, String genre, int year) throws Exception {
+		if (bookDao.getAll().size() >= 100) {
+			throw new Exception("Cannot save more than 100 books.");
+		}
+		Book book = new Book(title, author, genre, year);
+		bookDao.save(book);
+	}
 
     public void updateBook(Book book) throws Exception {
         bookDao.update(book);
     }
 
-    public void deleteBook(String id) throws Exception {
+    public void deleteBook(int id) throws Exception {
         bookDao.delete(id);
     }
 
-    public Book getBookById(String id) throws Exception {
+    public Book getBookById(int id) throws Exception {
         return bookDao.get(id);
     }
 }
