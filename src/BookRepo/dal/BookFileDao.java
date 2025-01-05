@@ -1,6 +1,9 @@
 package BookRepo.dal;
 
 import BookRepo.entity.Book;
+import BookRepo.exceptions.BookAlreadyExistsException;
+import BookRepo.exceptions.BookNotFoundException;
+
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -52,7 +55,7 @@ public class BookFileDao implements BookDao {
     @Override
     public void save(Book book) throws Exception {
         if (books.contains(book)) {
-            throw new Exception("Book with ID #" + book.getId() + " already exists in system.");
+            throw new BookAlreadyExistsException(book.getId());
         }
         currentID++;
         book.setId(String.valueOf(currentID));
@@ -88,6 +91,6 @@ public class BookFileDao implements BookDao {
                 return book;
             }
         }
-        return null;
+        throw new BookNotFoundException(id);
     }
 }

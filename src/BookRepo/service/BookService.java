@@ -2,13 +2,24 @@ package BookRepo.service;
 
 import BookRepo.dal.BookDao;
 import BookRepo.entity.Book;
+import BookRepo.exceptions.StorageLimitExceededException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@PropertySource("classpath:params.properties")
 public class BookService {
+	@Value("${maxBooksAllowed}")
+	private int maxNumofBooks;
+
+	@Value("${maxWordsInBook}")
+	private int maxCharactersinBookName;
+	
 	
     private final BookDao bookDao;
 
@@ -22,9 +33,16 @@ public class BookService {
     }
 
 	public void addBook(String title, String author, String genre, int year) throws Exception {
-		if (bookDao.getAll().size() >= 100) {
-			throw new Exception("Cannot save more than 100 books.");
+		if (bookDao.getAll().size() >= maxNumofBooks) {
+			throw new StorageLimitExceededException();
 		}
+		if (title == null || title.isEmpty() || author == null || author.isEmpty() || genre == null
+				|| genre.isEmpty()) {
+			throw new Exception("Title, author, and genre are required fields.");
+		}
+		if (title.length() > maxCharactersinBookName) {
+	        throw new Exception("Title cannot exceed " + maxCharactersinBookName + " characters.");
+	    }
 		Book book = new Book(title, author, genre, year);
 		bookDao.save(book);
 	}
