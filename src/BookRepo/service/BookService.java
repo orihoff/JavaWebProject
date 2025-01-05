@@ -33,11 +33,12 @@ public class BookService {
         bookDao.update(book);
     }
 
-    public void deleteBook(int id) throws Exception {
-        bookDao.delete(id);
+    public void deleteBook(String id) throws Exception { // Change int to String
+        bookDao.delete(id); // Ensure DAO uses String
     }
 
-    public Book getBookById(int id) throws Exception {
-        return bookDao.get(id);
+    public Book getBookById(String id) throws Exception { // Change int to String
+        return bookDao.get(id); // Ensure DAO uses String
     }
+
 }

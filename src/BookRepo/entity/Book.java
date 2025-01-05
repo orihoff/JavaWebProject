@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Book implements Serializable, Comparable<Book> {
 
 	
-	private int id;
+	private String id;
     private String title;
     private String author;
     private String genre;
@@ -14,7 +14,7 @@ public class Book implements Serializable, Comparable<Book> {
     static int currentId = 1;
 
     public Book(String title, String author, String genre, int publicationYear ) {
-        this.id = Book.currentId;
+        this.id = String.valueOf(Book.currentId);
         Book.currentId++;
         this.title = title;
         this.author = author;
@@ -24,11 +24,11 @@ public class Book implements Serializable, Comparable<Book> {
 
     // Getters and Setters
     
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,13 +69,14 @@ public class Book implements Serializable, Comparable<Book> {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Book book = (Book) obj;
-        return id == book.id;
+        return id.equals(book.id); // Compare strings correctly
     }
 
     @Override
     public int compareTo(Book other) {
-        return this.id - other.id;
+        return this.id.compareTo(other.id); // Use String's compareTo method
     }
+
 
     @Override
     public String toString() {

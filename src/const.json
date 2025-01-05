@@ -1,0 +1,5 @@
+{
+  "maxBooksAllowed": 100,
+  "maxWordsInBook": 50000,
+  "maxCharactersInBookName": 100
+}
