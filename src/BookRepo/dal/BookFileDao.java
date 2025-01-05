@@ -1,4 +1,3 @@
-
 package BookRepo.dal;
 
 import BookRepo.entity.Book;
@@ -18,17 +17,38 @@ public class BookFileDao implements BookDao {
     public BookFileDao() {
         loadBooks();
     }
-
+    
+    @SuppressWarnings("unchecked")
+    private void loadBooks() {
+    	// try-with-resources: try what is written in () without the need to manually close it using a finally block
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            books = (List<Book>) ois.readObject();
+        } catch (FileNotFoundException e) {
+            books = new ArrayList<>();
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading books from file.", e);
+        }
+    }
+    
+    private void saveBooksToFile() throws Exception {
+    	// try-with-resources: try what is written in () without the need to manually close it using a finally block
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            oos.writeObject(books);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving book to file.", e);
+        }
+    }
+    
     @Override
     public List<Book> getAll() throws Exception {
         Collections.sort(books);
-        return new ArrayList<>(books);
+        return new ArrayList<>(books); // ArrayList class implements 'Serializable' interface by default
     }
 
     @Override
     public void save(Book book) throws Exception {
         if (books.contains(book)) {
-            throw new Exception("Book with ID " + book.getId() + " already exists.");
+            throw new Exception("Book with ID #" + book.getId() + " already exists in system.");
         }
         books.add(book);
         saveBooksToFile();
@@ -36,9 +56,10 @@ public class BookFileDao implements BookDao {
 
     @Override
     public void update(Book book) throws Exception {
+    	//maybe check that book is not null .. ?
         Book existingBook = get(book.getId());
         if (existingBook == null) {
-            throw new Exception("Book with ID " + book.getId() + " not found.");
+            throw new Exception("Book with ID #" + book.getId() + " not found in system.");
         }
         books.remove(existingBook);
         books.add(book);
@@ -46,43 +67,22 @@ public class BookFileDao implements BookDao {
     }
 
     @Override
-    public void delete(int id) throws Exception {
+    public void delete(String id) throws Exception {
         Book book = get(id);
         if (book == null) {
-            throw new Exception("Book with ID " + id + " not found.");
+            throw new Exception("Book with ID #" + id + " not found in system.");
         }
         books.remove(book);
         saveBooksToFile();
     }
 
     @Override
-    public Book get(int id) throws Exception {
+    public Book get(String id) throws Exception {
         for (Book book : books) {
-            if (book.getId() == id) {
+            if (book.getId().equals(id)) {
                 return book;
             }
         }
         return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadBooks() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            books = (List<Book>) ois.readObject();
-        } catch (FileNotFoundException e) {
-            books = new ArrayList<>();
-            // Optionally log the event
-            System.err.println("File not found, initializing empty book list.");
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error loading books from file.", e);
-        }
-    }
-
-    private void saveBooksToFile() throws Exception {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(books);
-        } catch (Exception e) {
-            throw new RuntimeException("Error saving books to file.", e);
-        }
     }
 }

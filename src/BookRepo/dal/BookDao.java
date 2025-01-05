@@ -1,12 +1,14 @@
 package BookRepo.dal;
 
-import BookRepo.entity.Book;
+
 import java.util.List;
 
+import BookRepo.entity.Book;
+
 public interface BookDao {
-    List<Book> getAll() throws Exception;
-    void save(Book book) throws Exception;
-    void update(Book book) throws Exception;
-    void delete(int id) throws Exception;
-    Book get(int id) throws Exception;
+	public List<Book> getAll() throws Exception; // Returns sorted book list
+	public void save(Book book) throws Exception; // Adds book to storage
+	public void update(Book book) throws Exception; // Update existing book
+	public void delete(String id) throws Exception; // Delete book by ID
+	public Book get(String id) throws Exception; // Returns book by ID (null if does not exist).
 }
