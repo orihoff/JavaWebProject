@@ -9,6 +9,13 @@ import java.util.Scanner;
 @Component
 public class BookCLI {
 
+    private static final int SHOW_ALL_BOOKS = 1;
+    private static final int ADD_BOOK = 2;
+    private static final int UPDATE_BOOK = 3;
+    private static final int DELETE_BOOK = 4;
+    private static final int FIND_BOOK_BY_ID = 5;
+    private static final int EXIT = 0;
+
     private final BookService bookService;
 
     @Autowired
@@ -19,110 +26,128 @@ public class BookCLI {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
-        String title, author, genre , bookId;
-        int year = -1;
 
         while (!exit) {
-            System.out.println("\n=== Book Repository ===");
-            System.out.println("    1. Show all books");
-            System.out.println("    2. Add a book");
-            System.out.println("    3. Update a book");
-            System.out.println("    4. Delete a book");
-            System.out.println("    5. Find a book by ID");
-            System.out.println("    0. Exit");
-            System.out.print("Choose an option: ");
-            
-            int choice = -1;
-            try {
-                choice = Integer.parseInt(scanner.nextLine()); // Read input safely
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                continue;
-            }
+            printMenu();
+            int choice = readChoice(scanner);
 
-            try {
-                switch (choice) {
-                    case 1:
-                        bookService.getAllBooks().forEach(System.out::println);
-                        break;
-                    case 2:
-                        // Add a book
-                    	addBook(scanner);
-                        break;
-                    case 3:
-                    	
-                        // Update a book
-                        System.out.print("Enter ID of the book to update: ");
-                        bookId = scanner.nextLine();
-                        System.out.print("Enter new title: ");
-                        title = scanner.nextLine();
-                        System.out.print("Enter new author: ");
-                        author = scanner.nextLine();
-                        System.out.print("Enter new genre: ");
-                        genre = scanner.nextLine();
-                        System.out.print("Enter new publication year: ");
-                        try {
-                            year = Integer.parseInt(scanner.nextLine());
-                            bookService.updateBook(bookId, title, author, genre, year);
-                            System.out.println("Book updated successfully.");
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid year. Please enter a valid number.");
-                        } catch (Exception e) {
-                            System.out.println("Error: " + e.getMessage());
-                        }
-                        
-                        break;
-                    case 4:
-                        // Delete a book
-                        System.out.print("Enter ID to delete: ");
-                        String deleteId = scanner.nextLine();
-                        try {
-                            bookService.deleteBook(deleteId);
-                        } catch (Exception e) {
-                            System.out.println("Error: " + e.getMessage());
-                        }
-                        break;
-                    case 5:
-                        // Find a book by ID
-                        System.out.print("Enter ID: ");
-                        String searchId = scanner.nextLine();
-                        try {
-                            System.out.println(bookService.getBookById(searchId));
-                        } catch (Exception e) {
-                            System.out.println("Error: " + e.getMessage());
-                        }
-                        break;
-                    case 0:
-                        exit = true;
-                        break;
-                    default:
-                        System.out.println("Invalid option.");
-                }
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+            switch (choice) {
+                case SHOW_ALL_BOOKS:
+					showAllBooks();
+				
+                    break;
+                case ADD_BOOK:
+                    addBook(scanner);
+                    break;
+                case UPDATE_BOOK:
+                    updateBook(scanner);
+                    break;
+                case DELETE_BOOK:
+                    deleteBook(scanner);
+                    break;
+                case FIND_BOOK_BY_ID:
+                    findBookById(scanner);
+                    break;
+                case EXIT:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please choose a valid menu option.");
             }
         }
+
         scanner.close();
     }
 
-	private void addBook(Scanner scanner) throws Exception {
-		String title;
-		String author;
-		String genre;
-		int year;
-		System.out.print("Enter title: ");
-		title = scanner.nextLine();
-		System.out.print("Enter author: ");
-		author = scanner.nextLine();
-		System.out.print("Enter genre: ");
-		genre = scanner.nextLine();
-		System.out.print("Enter publication year: ");
-		try {
-		    year = Integer.parseInt(scanner.nextLine());
-		    //Book b = new Book();
-		    bookService.addBook(title, author, genre, year);
-		} catch (NumberFormatException e) {
-		    System.out.println("Invalid year. Please enter a valid number.");
+    private void printMenu() {
+        System.out.println("\n=== Book Repository ===");
+        System.out.println("    " + SHOW_ALL_BOOKS + ". Show all books");
+        System.out.println("    " + ADD_BOOK + ". Add a book");
+        System.out.println("    " + UPDATE_BOOK + ". Update a book");
+        System.out.println("    " + DELETE_BOOK + ". Delete a book");
+        System.out.println("    " + FIND_BOOK_BY_ID + ". Find a book by ID");
+        System.out.println("    " + EXIT + ". Exit");
+        System.out.print("Choose an option: ");
+    }
+
+    private int readChoice(Scanner scanner) {
+        try {
+            return Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a number.");
+            return -1; // ערך ברירת מחדל המבטא שגיאה
+        }
+    }
+
+    private void showAllBooks() {
+    	
+        try {
+			bookService.getAllBooks().forEach(System.out::println);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	}
+    }
+
+    private void addBook(Scanner scanner) {
+        try {
+            System.out.print("Enter title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter author: ");
+            String author = scanner.nextLine();
+            System.out.print("Enter genre: ");
+            String genre = scanner.nextLine();
+            System.out.print("Enter publication year: ");
+            int year = Integer.parseInt(scanner.nextLine());
+
+            bookService.addBook(title, author, genre, year);
+            System.out.println("Book added successfully.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid year. Please enter a valid number.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void updateBook(Scanner scanner) {
+        try {
+            System.out.print("Enter ID of the book to update: ");
+            String bookId = scanner.nextLine();
+            System.out.print("Enter new title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter new author: ");
+            String author = scanner.nextLine();
+            System.out.print("Enter new genre: ");
+            String genre = scanner.nextLine();
+            System.out.print("Enter new publication year: ");
+            int year = Integer.parseInt(scanner.nextLine());
+
+            bookService.updateBook(bookId, title, author, genre, year);
+            System.out.println("Book updated successfully.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid year. Please enter a valid number.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void deleteBook(Scanner scanner) {
+        System.out.print("Enter ID to delete: ");
+        String deleteId = scanner.nextLine();
+        try {
+            bookService.deleteBook(deleteId);
+            System.out.println("Book deleted successfully.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void findBookById(Scanner scanner) {
+        System.out.print("Enter ID: ");
+        String searchId = scanner.nextLine();
+        try {
+            System.out.println(bookService.getBookById(searchId));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 }
