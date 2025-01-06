@@ -47,19 +47,7 @@ public class BookCLI {
                         break;
                     case 2:
                         // Add a book
-                        System.out.print("Enter title: ");
-                        title = scanner.nextLine();
-                        System.out.print("Enter author: ");
-                        author = scanner.nextLine();
-                        System.out.print("Enter genre: ");
-                        genre = scanner.nextLine();
-                        System.out.print("Enter publication year: ");
-                        try {
-                            year = Integer.parseInt(scanner.nextLine());
-                            bookService.addBook(title, author, genre, year);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid year. Please enter a valid number.");
-                        }
+                    	addBook(scanner);
                         break;
                     case 3:
                     	
@@ -116,4 +104,25 @@ public class BookCLI {
         }
         scanner.close();
     }
+
+	private void addBook(Scanner scanner) throws Exception {
+		String title;
+		String author;
+		String genre;
+		int year;
+		System.out.print("Enter title: ");
+		title = scanner.nextLine();
+		System.out.print("Enter author: ");
+		author = scanner.nextLine();
+		System.out.print("Enter genre: ");
+		genre = scanner.nextLine();
+		System.out.print("Enter publication year: ");
+		try {
+		    year = Integer.parseInt(scanner.nextLine());
+		    //Book b = new Book();
+		    bookService.addBook(title, author, genre, year);
+		} catch (NumberFormatException e) {
+		    System.out.println("Invalid year. Please enter a valid number.");
+		}
+	}
 }
