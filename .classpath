@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/spring-jcl-5.0.7.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-web-5.0.7.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-webmvc-5.0.7.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/javax.annotation-api-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -39,14 +39,11 @@ public class BookService {
         return bookDao.getAll();
     }
 
-    public void addBook(String title, String author, String genre, int year) throws Exception {
+    public void addBook(Book book) throws Exception {
         if (bookDao.getAll().size() >= maxNumofBooks) {
             throw new StorageLimitExceededException();
         }
 
-        validateBookFields(title, author, genre, year);
-
-        Book book = new Book(title, author, genre, year);
         bookDao.save(book);
     }
 
@@ -75,7 +72,7 @@ public class BookService {
         return bookDao.get(id);
     }
 
-    private void validateBookFields(String title, String author, String genre, int year) throws Exception {
+    public void validateBookFields(String title, String author, String genre, int year) throws Exception {
         if (title == null || title.isEmpty() || author == null || author.isEmpty() || genre == null || genre.isEmpty()) {
             throw new MissingRequiredBookFieldsException();
         }

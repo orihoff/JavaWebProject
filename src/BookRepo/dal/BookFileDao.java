@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 @Repository
 public class BookFileDao implements BookDao {
 
@@ -18,9 +20,12 @@ public class BookFileDao implements BookDao {
     private int currentID;
     private List<Book> books;
 
-    public BookFileDao() {
+    
+    @PostConstruct
+    private void initialize() {
         loadBooks();
     }
+    
     
     @SuppressWarnings("unchecked")
     private void loadBooks() {

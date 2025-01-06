@@ -1,5 +1,6 @@
 package BookRepo.ui;
 
+import BookRepo.entity.Book;
 import BookRepo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -98,8 +99,9 @@ public class BookCLI {
             String genre = scanner.nextLine();
             System.out.print("Enter publication year: ");
             int year = Integer.parseInt(scanner.nextLine());
-
-            bookService.addBook(title, author, genre, year);
+            bookService.validateBookFields(title, author, genre, year);
+            Book book = new Book(title, author, genre, year);
+            bookService.addBook(book);
             System.out.println("Book added successfully.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid year. Please enter a valid number.");
@@ -120,7 +122,7 @@ public class BookCLI {
             String genre = scanner.nextLine();
             System.out.print("Enter new publication year: ");
             int year = Integer.parseInt(scanner.nextLine());
-
+            
             bookService.updateBook(bookId, title, author, genre, year);
             System.out.println("Book updated successfully.");
         } catch (NumberFormatException e) {
