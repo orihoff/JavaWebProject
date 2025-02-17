@@ -1,2 +1,2 @@
 # JavaWebProject
-this is a simple spring app
+this is a simple spring app with java
